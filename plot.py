@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import pandas as pd
 import os
+import sys
 
 ### FUNCTIONS ###
 
@@ -12,6 +13,14 @@ def make(size):
 
 def readFile(path):
     return pd.read_table(path, header=None)
+
+def getAni(file):
+    size = len(file)
+    pairs = [[j, i] for j in range(int(len(file.T))) for i in range(len(file)) if file[j][size - 1 - i] == 1]
+    if len(pairs) == 0:
+        return [], []
+    x, y = zip(*pairs)
+    return x, y
 
 def getHeat(ax, arq, i, j):
     axes = {"z": 2, "y": 1, "x": 0}
@@ -71,6 +80,9 @@ def saveImages(filePath):
     
     vecs = getVectors(ax1, ax2, file)
     ax.quiver(*vecs, linewidth=5, angles='xy', scale_units='xy', scale=2.0, pivot="mid")
+    
+    if (hasAni == True): ax.scatter(xAni, yAni, color='green', s=300.0)
+    
     ax.set_xlabel(fr"${ax1}$", size=20)
     ax.set_ylabel(fr"${ax2}$", size=20)
     im = ax.imshow(getIm(ax3, file), cmap='bwr', vmin=-1, vmax=1, interpolation='none')
@@ -83,8 +95,20 @@ def saveImages(filePath):
     ax.set_xlim([min([xleft, xright]), max([xleft, xright])])
     fig.savefig("images/" + fileName + ".jpeg", bbox_inches='tight')
     
-### END ###
+### END FUNCTIONS ###
 
-#Main Program
+### MAIN PROGRAM ###
+
 Nx = Ny = 40
+ani = False
+hasAni = False
+xAni = yAni = 0
+
+if (os.path.exists('./in/ani.in')):
+    hasAni = True
+    ani = readFile('./in/ani.in')
+    xAni, yAni = getAni(ani)
+
 plotByDirectory('files/')
+
+### END ###
