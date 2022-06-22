@@ -99,7 +99,7 @@ def saveImages(filePath):
 
 ### MAIN PROGRAM ###
 
-Nx = Ny = 40
+Nx = Ny = 20
 ani = False
 hasAni = False
 xAni = yAni = 0

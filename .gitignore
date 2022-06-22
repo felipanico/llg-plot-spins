@@ -1,3 +1,5 @@
 env/
-files/example.out
-images/example.jpeg
+images/
+temp/
+files/
+in/
