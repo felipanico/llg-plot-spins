@@ -67,6 +67,7 @@ def plotByDirectory(path):
     count = 0
     for fileName in filesList:
         filePath = path + fileName
+        if (fileName == ".gitignore") : continue;
         print('save image file: ', fileName)
         saveImages(filePath)
     return count
