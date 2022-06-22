@@ -99,14 +99,17 @@ def saveImages(filePath):
 
 ### MAIN PROGRAM ###
 
-Nx = Ny = 20
+Nx = Ny = 40
 ani = False
 hasAni = False
 xAni = yAni = 0
 
-if (os.path.exists('./in/ani.in')):
+aniPath = ''
+if (len(sys.argv) > 1): aniPath = './in/' + sys.argv[1] + '.in'
+
+if (os.path.exists(aniPath)):
     hasAni = True
-    ani = readFile('./in/ani.in')
+    ani = readFile(aniPath)
     xAni, yAni = getAni(ani)
 
 plotByDirectory('files/')
