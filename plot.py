@@ -61,18 +61,22 @@ def selectImAx(ax):
     elif ax == 0:
         return axes_[1], axes_[2], axes_[0]
 
-def plotByDirectory(path):
+def plotByDirectory(path, suffix):
     filesList = []
     filesList = os.listdir(path)
     count = 0
+    
     for fileName in filesList:
+        if (fileName == '.gitignore') : continue
+        if (suffix != '') : suffix = 'images/' + suffix
+        
         filePath = path + fileName
-        if (fileName == ".gitignore") : continue;
         print('save image file: ', fileName)
-        saveImages(filePath)
+        saveImages(filePath, suffix)
+
     return count
 
-def saveImages(filePath):
+def saveImages(filePath, suffix):
     file = readFile(filePath)
     fileName = Path(filePath).stem
     fig, ax = make([Nx, Ny])
@@ -92,9 +96,13 @@ def saveImages(filePath):
     ybot, ytop = ax.get_ylim()
     xleft, xright = ax.get_xlim()
 
+    filePath = 'images/' + fileName
+
+    if (suffix != ''): filePath = suffix
+
     ax.set_ylim([min([ybot, ytop]), max([ybot, ytop])])
     ax.set_xlim([min([xleft, xright]), max([xleft, xright])])
-    fig.savefig("images/" + fileName + ".jpeg", bbox_inches='tight')
+    fig.savefig(filePath + '.jpeg', bbox_inches='tight')
     
 ### END FUNCTIONS ###
 
@@ -106,13 +114,21 @@ hasAni = False
 xAni = yAni = 0
 
 aniPath = ''
+separatorAniChar = '_'
+suffix = ''
+
 if (len(sys.argv) > 1): aniPath = './in/' + sys.argv[1] + '.in'
+
+if (len(sys.argv) > 2):
+    aniName = sys.argv[1].split('_')
+    suffix = sys.argv[2] + separatorAniChar + aniName[1]
+
 
 if (os.path.exists(aniPath)):
     hasAni = True
     ani = readFile(aniPath)
     xAni, yAni = getAni(ani)
 
-plotByDirectory('files/')
+plotByDirectory('files/', suffix)
 
 ### END ###
